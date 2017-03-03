@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+selection() {
+  find ~/ -type f | dmenu -p Upload
+}
+
+if [[ $1 ]]; then
+  result="$1"
+else
+  result=$(selection)
+fi
+
+pbpst -Sf $result | xcmenu -ic #|| curl -sT- https://p.iotek.org < $result | xcmenu -ic
