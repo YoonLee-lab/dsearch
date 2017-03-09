@@ -1,23 +1,21 @@
-#!/bin/bash
+#!/bin/sh
 # Screen record or screen shot
 
 PB="https://pb.gehidore.net/"
 
 picture() {
-	maim -d 1 --format png /dev/stdout | pbpst -S | sed 's/$/.png/' | xcmenu -ic
+	maim -d 1 --format=png /dev/stdout | curl -F c=@- "https://ptpb.pw/?u=1" | sed 's/$/.png/' | xcmenu -ic
 }
 
 win() {
 	WID=$(lsw | tail -n 1)
-	maim -i $WID -d 1 --format png /dev/stdout | pbpst -S | sed 's/$/.png/' | xcmenu -ic
+	maim --window="$WID" -d 1 --format=png /dev/stdout | curl -F c=@- "https://ptpb.pw/?u=1" | sed 's/$/.png/' | xcmenu -ic
 }
 
 video() {
- 	tmp=$(mktemp --suffix=.mkv)
- 	ffmpeg -y -video_size "$(wattr w "$(lsw -r)")x$(wattr h "$(lsw -r)")" -framerate 60 -f x11grab -i "$DISPLAY"  "$tmp"
- 	wait
-	pbpst -Sf "$tmp" | xcmenu -ic 
-	wait && rm "$tmp"
+ 	#tmp=$(mktemp --suffix=.mkv)
+ 	ffmpeg -y -video_size "$(wattr w "$(lsw -r)")x$(wattr h "$(lsw -r)")" -framerate 60 -f x11grab -i "$DISPLAY" -f matroska - | curl -F c=@- "https://ptpb.pw/?u=1" | sed 's/$/.mkv/' | xcmenu -ic 
+	#wait && rm "$tmp"
 }
 
 ## Main
