@@ -7,7 +7,7 @@ Will install to /usr/local/bin, and /usr/local/share/dsearch
 ## configuration
 To pipe additional content in to the menu, dsearch will source $XDG_CONFIG_HOME/dsearch/entriesrc, running each line in that file and piping (in order) those items in. It's the first thing sourced, so your items show up with precedence.
 Be sure to include logic for handling your entries, which would be found in $XDG_CONFIG_HOME/dsearch/handlersrc
-This is wired heavily into [https://github.com/halfwit/plumber](plumber) and also expects to find youtube API keys in $XDG_DATA_HOME/youtube/key and $XDG_DATA_HOME/youtube/imid
+This is wired heavily into [my plumber](https://github.com/halfwit/plumber) and also expects to find youtube API keys in $XDG_DATA_HOME/youtube/key and $XDG_DATA_HOME/youtube/imid
 
 ###Example 
 
