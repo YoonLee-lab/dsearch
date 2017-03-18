@@ -9,7 +9,7 @@ To pipe additional content in to the menu, dsearch will source $XDG_CONFIG_HOME/
 Be sure to include logic for handling your entries, which would be found in $XDG_CONFIG_HOME/dsearch/handlersrc
 This is wired heavily into [my plumber](https://github.com/halfwit/plumber) and also expects to find youtube API keys in $XDG_DATA_HOME/youtube/key and $XDG_DATA_HOME/youtube/imid
 
-###Example 
+### Example handlersrc
 
 ```sh
 # Last selection
