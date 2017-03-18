@@ -5,5 +5,19 @@ make install
 Will install to /usr/local/bin, and /usr/local/share/dsearch
 
 ## configuration
-Dsearch will, by default pipe the contents of your ~/ path, less any .git directories, as well as entries for each handler in your handlerbin.
-To pipe additional content in to the menu, dsearch will source $XDG_CONFIG_HOME/dsearch/entries.rc, running each line in that file and piping (in order) those items in. It's the first thing sourced, so your items show up with precedence.
+To pipe additional content in to the menu, dsearch will source $XDG_CONFIG_HOME/dsearch/entriesrc, running each line in that file and piping (in order) those items in. It's the first thing sourced, so your items show up with precedence.
+Be sure to include logic for handling your entries, which would be found in $XDG_CONFIG_HOME/dsearch/handlersrc
+
+###Example 
+
+```sh
+# Last selection
+xcmenu --list | head -n 1
+
+# List bookmark dir
+cd $XDG_DATA_HOME/bookmark" || exit 1
+find -not -path '*/\.*' -type f -printf "%f\n" 
+
+# Arbitrary file selection
+find ~/ -type f ! -name *.git*
+```
