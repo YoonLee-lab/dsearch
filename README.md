@@ -9,7 +9,7 @@ To pipe additional content in to the menu, dsearch will source $XDG_CONFIG_HOME/
 Be sure to include logic for handling your entries, which would be found in $XDG_CONFIG_HOME/dsearch/handlersrc
 This is wired heavily into [my plumber](https://github.com/halfwit/plumber) and also expects to find youtube API keys in $XDG_DATA_HOME/youtube/key and $XDG_DATA_HOME/youtube/imid
 
-### Example handlersrc
+### Example entriessrc
 
 ```sh
 # Last selection
@@ -21,4 +21,22 @@ find -not -path '*/\.*' -type f -printf "%f\n"
 
 # Arbitrary file selection
 find ~/ -type f ! -name *.git*
+```
+
+### Example handlersrc
+
+```sh
+# Set our default handlers
+browse=firefox
+play=mpv
+view=sxiv
+docs=zathura
+edit=st -e vim
+hear=mpv
+
+# Case match anything that we emit in entriesrc
+case "$input" in
+	browse\ -\ *)   read -r result < "$XDG_DATA_HOME/bookmark/$input"
+					exec browse "$result" ;;
+esac
 ```
