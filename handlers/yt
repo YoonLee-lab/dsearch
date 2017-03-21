@@ -2,6 +2,7 @@
 # Youtube search handler
 
 readonly images="$(mktemp -d /tmp/yt.XXXX)"
+readonly handlers="/usr/local/share/dsearch/"
 readonly requests=50
 declare type=video
 
@@ -55,7 +56,7 @@ handle() {
 	rm -rf "$images"
 }
 
-[[ "$1" == save ]] && exec "$XDG_DATA_HOME"/youtube/savepl
+[[ "$1" == save ]] && exec "$handlers"/youtube/savepl
 [[ "$1" == \!pl\ * ]] && type="playlist"
 [[ "$1" == \!ch\ * ]] && type="channel"
 

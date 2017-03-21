@@ -30,7 +30,6 @@ handle_results() { # args -> launch
 			exit 0
 		fi
 		# We test user's case first
-		test -f $config/handlersrc && . $config/handlersrc "$input"
 		case "$input" in
 			!lyrics) exec "$handledir"/lyrics ;;
 			!pocket) exec "$handledir"/pocket ;;
@@ -51,7 +50,8 @@ handle_results() { # args -> launch
 			!man)    exec "$handledir"/man    ;;
 			!pb)     exec "$handledir"/pb     ;;
 			!np)     exec "$handledir"/np     ;;
-	
+
+
 			!pl\ save)        exec "$handledir"/youtube/savesearch ;;
 			!reddit\ *)       exec "$handledir"/reddit "${input#*reddit }" ;;
 			!lyrics\ *)       exec "$handledir"/lyrics "${input#*lyrics }" ;;
@@ -74,7 +74,9 @@ handle_results() { # args -> launch
 			!is\ *)     plumber `"$handledir"/is     "${input#*is }"`   ;;
 			!w\ *)		  exec "$handledir"/w	   "${input#*w }" 	   ;;
 			!g\ *)		  exec "$handledir"/g      "${input#*g }"      ;;
-			
+		esac
+		test -f $config/handlersrc && . $config/handlersrc "$input"
+		case "$input" in
 			!close) pkill surf; pkill chromium ;;
 			# Not really search related, but useful
 			!snap)   exec "$handledir"/rec "snap"                    ;;
