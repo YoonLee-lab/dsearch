@@ -1,26 +1,22 @@
 #!/bin/sh
 # Screen record or screen shot
 
-PB="https://pb.gehidore.net/"
+PB="https://ptpb.pw/?u=1"
 
 picture() {
-	maim -d 1 --format=png /dev/stdout | curl -F c=@- "https://ptpb.pw/?u=1" | sed 's/$/.png/' | xcmenu -ic
+	maim -d 1 --format=png /dev/stdout | curl -F c=@- "$PB" | sed 's/$/.png/' | xcmenu -ic
 }
 
 win() {
 	WID=$(lsw | tail -n 1)
-	maim --window="$WID" -d 1 --format=png /dev/stdout | curl -F c=@- "https://ptpb.pw/?u=1" | sed 's/$/.png/' | xcmenu -ic
+	maim --window="$WID" -d 1 --format=png /dev/stdout | curl -F c=@- "$PB" | sed 's/$/.png/' | xcmenu -ic
 }
 
 video() {
- 	#tmp=$(mktemp --suffix=.mkv)
- 	ffmpeg -y -video_size "$(wattr w "$(lsw -r)")x$(wattr h "$(lsw -r)")" -framerate 60 -f x11grab -i "$DISPLAY" -f matroska - | curl -F c=@- "https://ptpb.pw/?u=1" | sed 's/$/.mkv/' | xcmenu -ic 
-	#wait && rm "$tmp"
+ 	ffmpeg -y -video_size "$(wattr w "$(lsw -r)")x$(wattr h "$(lsw -r)")" -framerate 60 -f x11grab -i "$DISPLAY" -f matroska - | curl -F c=@- "$PB" | sed 's/$/.mkv/' | xcmenu -ic 
 }
 
 ## Main
-
-
 case "$1" in
  	snap) picture ;;
  	win)  win ;;
