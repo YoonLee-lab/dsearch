@@ -79,3 +79,4 @@ select_feed() {
 }
 
 select_feed
+update_count
