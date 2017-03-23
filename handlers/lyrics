@@ -8,7 +8,7 @@ if pgrep mpg123; then
 	artist=`mpc current --format "%artist%" | sed 's/ /+/g'`
 	title=`mpc current --format "%title%" | sed 's/ /+/g/'`
 elif pgrep mpv; then
-	artist="`echo '{"command": ["get_property", "media-title"] }' | socat - /tmp/mpvsock | jshon -e data -u`"
+	artist="`echo '{"command": ["get_property", "media-title"] }' | socat - /tmp/mpvsocket | jshon -e data -u`"
 	title="`echo "$artist" | cut -d '-' -f2 | sed 's/^ //' | sed 's/ /+/g'`"
 	artist="`echo "$artist" | cut -d '-' -f1 | sed 's/ $//' | sed 's/ /+/g'`"
 fi

@@ -8,10 +8,10 @@ readonly datadir=${XDG_DATA_HOME:-$HOME/local/share}
 #[[ ! $result ]] && exit 0
 
 main() {
-	n=$(echo '{ "command": ["get_property", "playlist-count"] }' | socat - /tmp/mpvsock | jshon -e data)
+	n=$(echo '{ "command": ["get_property", "playlist-count"] }' | socat - /tmp/mpvsocket | jshon -e data)
 
 	for (( i = 0; i < n; i++ )); do
-  		URL=$(echo '{ "command": ["get_property_string", "playlist/'$i'/title"] }' | socat - /tmp/mpvsock | jshon -e data -u)  
+  		URL=$(echo '{ "command": ["get_property_string", "playlist/'$i'/title"] }' | socat - /tmp/mpvsocket | jshon -e data -u)
 	done
 }
 
