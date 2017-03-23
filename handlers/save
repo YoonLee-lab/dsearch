@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 
 # Tool to save arbitrary things from the current clip to various locations
-
-
-
 name() {
   printf '\n' | dmenu -p "Save $1 as: " -l 1
 }
@@ -12,7 +9,7 @@ doc() {
   local result cover
   read -r result
 
-  cover="$("$XDG_DATA_HOME/dsearch/is" "$result")"
+  cover="$("/usr/local/share/dsearch/is" "$result")"
   [[ $result ]] && st -t float -e /home/halfwit/local/bin/bookkeep mk "$result" -t "$1" -e nvim -c "$cover"
   if [[ -s $XDG_DATA_HOME/librarian/bin/$result ]]; then
     curl -s "$2" > media/docs/"$result.$1"
