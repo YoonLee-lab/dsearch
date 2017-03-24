@@ -10,6 +10,9 @@ list() {
 			*browse*) sed -n -e 's/_SURF_URI(STRING) = "//p' <<< "$(xprop -id "$w")" ;;
 		esac
 	done
+	if pgrep mpv; then
+		printf 'now playing - %s\n' "$(echo '{"command": ["get_property", "path"] }' | socat - /tmp/mpvsocket | jshon -e data -u | sed 's|ytdl://|https://www.youtube.com/watch?v=|')"
+	fi
 	find "$datadir"/bookmark -type f -not -path '*/\.*'
 	find "$datadir"/mpv -type f -not -path '*/\.*'
 	find "$pics" -type f -not -path '*/\.*'
@@ -19,6 +22,8 @@ build() {
 	local input
 	while read -r input; do
 		case "$input" in
+			*now\ playing*)
+				printf '%s\n' "$input" ;;
 			http*)
 				printf 'current - %s\n' "${input::-1}" ;;
 			*bookmark*)
@@ -27,16 +32,16 @@ build() {
 				;;
 			*mpv*)
 				input="${input/.pls/}"
-				printf '%s\n' "video - ${input##*mpv\/}"
+				printf '%s\n' "playlist - ${input##*mpv\/}"
 				;;
 			*pictures*) 
 				printf 'IMG:%q\t%s\n' "$pic/$input" "image - ${input##*pictures\/}"
 				;;
-		esac
+					esac
 	done
 }
 
-video() {
+playlist() {
 	local result
 	lnk=$(sed -n -e 's/^Title[0-9]\+=//p' < "$datadir/mpv/${1##*-\ }.pls" | dmenu -p "Select video" ) 
   
@@ -50,9 +55,10 @@ lnk=$(list | sort -u | build | dmenu -p "Select bookmark: ")
 
 case $lnk in
 	current*) lnk="${lnk#*-\ }" ;;
-	video*) lnk="$(video "$lnk")" ;;
+	playlist*) lnk="$(playlist "$lnk")" ;;
 	image*) lnk="$(exiftool "$pics/${lnk#*-\ }" | awk '/^Comment/ { print $NF }')" ;;
-	*) read -r lnk < "$datadir/bookmark/$lnk"
+	now\ playing*) lnk="${lnk#*-\ }" ;;
+	*) read -r lnk < "$datadir/bookmark/$lnk" ;;
 esac
 
 if [[ $lnk == ytdl* ]]; then
