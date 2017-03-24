@@ -59,7 +59,7 @@ if grep "github" <<< "$input"; then
 fi
 
 if grep "youtu" <<< "$input"; then
-    exec "$XDG_DATA_HOME/youtube/savepl" "$input" 
+    exec /usr/local/share/dsearch/youtube/savepl "$input" 
 fi
 
 [[ $input ]] && case $(content-type "$input") in
