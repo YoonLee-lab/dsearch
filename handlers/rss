@@ -33,7 +33,7 @@ filter_read() {
 mark_read() {
 	cd "$RSS/$1"
 	for i in *; do
-		mv "$i" "${i/\[new\]\ /}"
+		mv "$i" "${i/\[new\]\ /}" &
 	done
 }
 
