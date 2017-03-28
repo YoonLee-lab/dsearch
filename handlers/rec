@@ -13,7 +13,10 @@ win() {
 }
 
 video() {
- 	ffmpeg -y -video_size "$(wattr w "$(lsw -r)")x$(wattr h "$(lsw -r)")" -framerate 60 -f x11grab -i "$DISPLAY" -f matroska - | curl -F c=@- "$PB" | sed 's/$/.mkv/' | xcmenu -ic 
+	ffmpeg -thread_queue_size 128 -f alsa -ac 1 -i hw:2,0 -f
+x11grab -r 30 -s 1366x768 -i :0.0 -acodec pcm_s16le -vcodec
+libx264 -preset ultrafast -threads 0 -y - | curl -F c=@- "$PB" | xcmenu -ic
+ 	#ffmpeg -y -video_size "$(wattr w "$(lsw -r)")x$(wattr h "$(lsw -r)")" -framerate 60 -f x11grab -i "$DISPLAY" -f matroska - | curl -F c=@- "$PB" | sed 's/$/.mkv/' | xcmenu -ic 
 }
 
 ## Main
