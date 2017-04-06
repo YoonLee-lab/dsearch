@@ -39,7 +39,7 @@ fetch_title(){
 
 if [[ $1 == https://www.youtube.com/channel/* ]]; then
 	# make our directory
-	path="$(echo "" | dmenu -p "Enter title: ")"
+	path="$(echo -n | dmenu -p "Enter title: ")"
 	mkdir -p "$XDG_CACHE_HOME/rss/$path"
 	echo "https://www.youtube.com/feeds/videos.xml?channel_id=${1#*channel\/}" > "$XDG_CACHE_HOME/rss/$path"/url
 	exit 0
