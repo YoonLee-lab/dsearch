@@ -16,5 +16,5 @@ fi
 curl -s "https://makeitpersonal.co/lyrics?artist=$artist&title=$title" > "$tmp"
 
 # Fire off results
-st -t lyrics -e less "$tmp"
+"$TERMINAL" -c lyrics -e less "$tmp"
 rm -rf "$tmp"

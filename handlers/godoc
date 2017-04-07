@@ -4,7 +4,7 @@
 input="$(echo "$1" | tr -d "\"")"
 
 if go doc "$input" &>/dev/null; then
-	exec st -t man -e varless "$(go doc "$input")"
+	exec "$TERMINAL" -c man -e varless "$(go doc "$input")"
 fi
 
 secondarg() {

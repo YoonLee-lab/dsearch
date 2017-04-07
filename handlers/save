@@ -10,7 +10,7 @@ doc() {
   read -r result
 
   cover="$("/usr/local/share/dsearch/is" "$result")"
-  [[ $result ]] && st -t float -e /home/halfwit/local/bin/bookkeep mk "$result" -t "$1" -e nvim -c "$cover"
+  [[ $result ]] && "$TERMINAL" -c float -e /home/halfwit/local/bin/bookkeep mk "$result" -t "$1" -e nvim -c "$cover"
   if [[ -s $XDG_DATA_HOME/librarian/bin/$result ]]; then
     curl -s "$2" > media/docs/"$result.$1"
   fi
@@ -51,9 +51,9 @@ if grep "github" <<< "$input"; then
   [ $result ] || exit 0
   if [[ $result == "Clone" ]]; then
     cd $HOME/code
-    st -t float -g 45x4+20+20 -e git clone "$input"
+    "$TERMINAL" -c float -g 45x4+20+20 -e git clone "$input"
     cd "${input##*/}"
-    st &
+    "$TERMINAL" &
     exit 0
   fi
 fi
