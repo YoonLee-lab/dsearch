@@ -48,7 +48,6 @@ select_post() {
 	local feed
 	echo "$RSS/$1"
 	while :; do
-		update_count
 		feed="$(ls -t -I url -I count "$RSS/$1" | append "clear posts" | dmenu -p "Select post: ")"
 		[[ ! $feed ]] && break
 		case "$feed" in
@@ -59,6 +58,7 @@ select_post() {
     	read -r url < "$RSS/$1/$feed"
     	mv "$RSS/$1/$feed" "$RSS/$1/${feed/\[new\]\ /}"
     	plumber "$url" & 
+		update_count
 	done
 }
 
@@ -66,7 +66,6 @@ select_post() {
 select_feed() {
 	local feed
 	while :; do
-		update_count
 		feed="$(ls "$RSS" | filter_read | dmenu -p "Select sub: ")"
 		[[ ! $feed ]] && break
 		case "$feed" in
@@ -75,8 +74,8 @@ select_feed() {
 			*)			all=false
 						select_post "$feed" 	;;
 		esac
+		update_count
 	done
 }
 
 select_feed
-update_count
