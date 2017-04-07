@@ -13,7 +13,10 @@ win() {
 }
 
 video() {
- 	ffmpeg -y -video_size "$(wattr w "$(lsw -r)")x$(wattr h "$(lsw -r)")" -framerate 60 -f x11grab -i "$DISPLAY" -f matroska - | curl -F c=@- "$PB" | sed 's/$/.mkv/' | xcmenu -ic 
+	tmp="`mktemp`"
+ 	ffmpeg -y -video_size "$(wattr w "$(lsw -r)")x$(wattr h "$(lsw -r)")" -framerate 60 -f x11grab -i "$DISPLAY" -f matroska "$tmp"
+	wait
+ 	curl -F c=@"$tmp" "$PB" | sed 's/$/.mkv/' | xcmenu -ic 
 }
 
 ## Main
