@@ -19,7 +19,7 @@ build_dirs() {
         read -r thumbnail
         read -r flair
     } do
-        title="${title//\/}"
+        mkdir -p "$(dirname "$title")"
         curl -s "$thumbnail" -o "$tmp/$title.image" &
         printf '%s\n' "$url" > "$tmp/$title.url"
         if [[ $flair ]]; then
