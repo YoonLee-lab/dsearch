@@ -31,13 +31,13 @@ parse() {
 
 buildmenu() {
 	local name url i=0
-
 	while {
 		read -r name
 		read -r blob
 		read -r url 
 	} do
-		curl -s "$url" -o "$images/$i" &
+		mkdir -p "$images/$(dirname "$name")"
+		curl -s --create-dirs "$url" -o "$images/$i" &		
 		printf '%s\n' "$blob" > "$images/$name-url"
 		printf 'IMG:%q\t%s\n' "$images/$i" "$name"
 		((++i))

@@ -34,11 +34,11 @@ handle_selection() {
     local url
     while read -r selection; do
         read -r url < "$tmp/${selection##*-\ }.url"
-        [[ $url ]] && "$TERMINAL" -c news -e browse "https://www.reddit.com$url" &
+        [[ $url ]] && browse "https://www.reddit.com$url" &
     done
-    rm -rf "$tmp"
 }
 
 
 ## Main 
 fetch "$1" | build_dirs | dmenu -p "Select post: " -is 140x140 | handle_selection
+rm -rf "$tmp"
