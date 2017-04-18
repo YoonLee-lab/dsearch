@@ -2,11 +2,12 @@
 
 # Code search using dmenu, ag (single string)
 
-cd "$HOME" || exit 1
-result=`ag "$1" | dmenu -p "Select file: "`
 
-if test -n "$result"; then
-	subres="${result#*:}"
-	edit +"${subres%%:*}" "$HOME/${result%%:*}" &
-fi
-exit 0
+handle() {
+	while read -r result; do
+		subres="${result#*:}"
+		edit +"${subres%%:*}" "$HOME/${result%%:*}" &
+	done
+}
+
+ag "$1" "$HOME" | dmenu -p "Select file: " | handle

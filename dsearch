@@ -33,7 +33,6 @@ handle_results() { # args -> launch
 		case "$input" in
 			!lyrics) exec "$handledir"/lyrics ;;
 			!pocket) exec "$handledir"/pocket ;;
-			!commit) exec "$handledir"/commit ;;
 			!photo)  exec "$handledir"/photo  ;;
 			!mpvl)   exec "$handledir"/mpvl   ;;
 			!read)   exec "$handledir"/read   ;;
@@ -44,8 +43,6 @@ handle_results() { # args -> launch
 			!song)   exec "$handledir"/song   ;;
 			!math)   exec "$handledir"/math   ;;
 			!pass)   exec "$handledir"/pass   ;;
-			!push)	 exec "$handledir"/push	  ;;
-			!pull)	 exec "$handledir"/pull	  ;;
 			!rss)    exec "$handledir"/rss    ;;
 			!man)    exec "$handledir"/man    ;;
 			!pb)     exec "$handledir"/pb     ;;
@@ -55,7 +52,7 @@ handle_results() { # args -> launch
 			!pl\ save)        exec "$handledir"/youtube/savesearch ;;
 			!reddit\ *)       exec "$handledir"/reddit "${input#*reddit }" ;;
 			!lyrics\ *)       exec "$handledir"/lyrics "${input#*lyrics }" ;;
-			!godoc\ *)	      exec "$handledir"/godoc  "${input#*godoc }"   ;;
+			!godoc\ *)	      exec "$handledir"/godoc  "${input#*godoc }"  ;;
 			!album\ *)        exec "$handledir"/album  "${input#*album }"  ;;
 			!quote\ *)        exec "$handledir"/quote  "${input#*quote }"  ;;
 			!save\ *)         exec "$handledir"/save   "${input#*save }"   ;;
