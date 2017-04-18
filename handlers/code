@@ -1,8 +1,6 @@
 #!/bin/sh
 
 # Code search using dmenu, ag (single string)
-
-
 handle() {
 	while read -r result; do
 		subres="${result#*:}"
