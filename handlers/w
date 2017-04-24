@@ -32,7 +32,7 @@ count=$(jshon -F $tmp -e 1 -a -u | wc -l)
 
 # Check if we need to disambiguate
 if [[ $count -gt 1 ]]; then
-	result="$(build | chunk | dmenu -p "Select disambiguation: ")"
+	result="$(build | chunk | dmenu -p "Disambiguate: ")"
 else
 	result="$(jshon -F $tmp -e 1 -a -uppe 3 -a -u | chunk)"
 fi
