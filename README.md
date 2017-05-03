@@ -16,7 +16,7 @@ This is wired heavily into [my plumber](https://github.com/halfwit/plumber) and 
 xcmenu --list | head -n 1
 
 # List bookmark dir
-cd $XDG_DATA_HOME/bookmark" || exit 1
+cd "$XDG_DATA_HOME/bookmark" || exit 1
 find -not -path '*/\.*' -type f -printf "%f\n" 
 
 # Arbitrary file selection
