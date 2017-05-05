@@ -19,7 +19,7 @@ get_selection() {
 	if test -z "$1"; then
 		create_menu | dmenu -p Search | sed 's/^.*http/http/'
 	else
-		printf "$1\n"
+		printf '%s\n' "$1"
 	fi
 }
 
