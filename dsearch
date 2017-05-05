@@ -2,16 +2,16 @@
 # Dmenu search with history
 
 datadir=/usr/local/share
-handledir="$datadir"/dsearch
-search="https://duckduckgo.com?q="
-config="${XDG_CONFIG_HOME:-~/.config}/dsearch"
+handledir=$datadir/dsearch
+search='https://duckduckgo.com?q='
+config=${XDG_CONFIG_HOME:-~/.config}/dsearch
 
 create_menu() {
-	test -f $config/entriesrc && . $config/entriesrc
+	test -f "$config"/entriesrc && . "$config"/entriesrc
 	# Bang completions
 	cd -- "$handledir" || exit 1
 	find -type f -printf "!%f\n" | sort -u
-	printf '%s\n%s\n%s\n%s\n' "!snap" "!stop" "!close" "!win"
+	printf '%s\n%s\n%s\n%s\n' '!snap' '!stop' '!close' '!win'
 
 }
 
@@ -30,7 +30,7 @@ handle_results() { # args -> launch
 			exit 0
 		fi
 		# We test user's case first
-		case "$input" in
+		case $input in
 			!lyrics) exec "$handledir"/lyrics ;;
 			!pocket) exec "$handledir"/pocket ;;
 			!photo)  exec "$handledir"/photo  ;;
@@ -72,14 +72,14 @@ handle_results() { # args -> launch
 			!w\ *)		  exec "$handledir"/w	   "${input#*w }" 	   ;;
 			!g\ *)		  exec "$handledir"/g      "${input#*g }"      ;;
 		esac
-		test -f $config/handlersrc && . $config/handlersrc "$input"
-		case "$input" in
+		test -f "$config"/handlersrc && . "$config"/handlersrc "$input"
+		case $input in
 			!close) pkill surf; pkill chromium ;;
 			# Not really search related, but useful
-			!snap)   exec "$handledir"/rec "snap"                    ;;
-			!stop)   exec "$handledir"/rec "stop"                    ;;
-			!win)    exec "$handledir"/rec "win"		     ;;
-			!rec)    exec "$handledir"/rec "vid"                     ;;
+			!snap)   exec "$handledir"/rec 'snap'                    ;;
+			!stop)   exec "$handledir"/rec 'stop'                    ;;
+			!win)    exec "$handledir"/rec 'win'		     ;;
+			!rec)    exec "$handledir"/rec 'vid'                     ;;
 			!*)      exec browse "$search${input%% *}+${input#* }"   ;;
 			*)       exec browse "$input" ;;
 		esac
