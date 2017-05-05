@@ -1,6 +1,8 @@
 # dsearch - dmenu based frontend 
 # See LICENSE file for copyright and license details.
 
+PREFIX = /usr/local
+
 install:
 	@mkdir -p ${DESTDIR}${PREFIX}/bin
 	@cp dsearch ${DESTDIR}${PREFIX}/bin/dsearch
