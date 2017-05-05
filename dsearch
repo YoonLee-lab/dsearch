@@ -10,7 +10,7 @@ create_menu() {
 	test -f "$config"/entriesrc && . "$config"/entriesrc
 	# Bang completions
 	cd -- "$handledir" || exit 1
-	find -type f -printf "!%f\n" | sort -u
+	find . -type f -printf "!%f\n" | sort -u
 	printf '%s\n%s\n%s\n%s\n' '!snap' '!stop' '!close' '!win'
 
 }
