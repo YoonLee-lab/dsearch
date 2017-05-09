@@ -1,47 +1,33 @@
-#!/bin/bash
-## use last for last result
-## use clip to send to clip
+#!/bin/sh
+## Requires units, bc, dmenu
 
-declare -a results
+HIST="$XDG_DATA_HOME/mathhist"
 
-readonly histfile="/tmp/mathhist"
+# math base calc convert icalc rpn units
+cheese_it() {
+	case "$1" in
+		base) printf 'ibase=%s;obase=%s;%s\n' "$2" "$3" "$4" | bc ;;
+		calc) printf '%s%s%s\n'	"$2" "$3" "$4" | bc ;;
+		convert) units "$2 $3" $5 | awk 'NR==1{print $2}';;
+		icalc) printf '%s%s%s/1\n' "$2" "$3" "$4" | bc ;;
+		dpi) printf 'sqrt(%s^2+%s^2)/%s\n' "$2" "$3" "$4" | bc ;;
+		*) printf '%s\n' "$1"
+	esac
+}
 
-[[ -e $histfile ]] || touch "$histfile"
-
-# Read in history
-while read -r item; do
-    results+=($item)
-done < "$histfile"
-
-# Sanitize input
-if [[ $1 ]]; then
-    [[ ${1[0]} =~ [0-9] ]] || inp="${results[-1]}$1"
-    inp="${inp//\ /}"
-else
-    inp="$(printf '%s\n' "${results[@]}" | tac | dmenu -p "eval | clip: ")"
-fi
-
-# Break this out of the while loop.
-while :; do
-    if [[ "${results[@]}" =~ "$inp" ]]; then
-        xcmenu -ic <<< "$inp"
-        break
-    fi
- 
-    invar=$(bc -l <<< "$inp" | sed '/\./ s/\.\{0,1\}0\{1,\}$//')
-   
-    # If result matches entry 
-    if [[ $invar ]]; then
-        results+=($invar)
-        inp="$(printf '%s\n' "${results[@]}" | tac | dmenu -p "eval | clip: ")"
-        
-        [[ ${inp[0]} =~ [0-9] ]] || inp="${results[-1]}$inp"
-        
-        inp="${inp//\ /}"
-    else
-        break
-    fi
-
-done
-
-printf '%s\n' "${results[@]}" > "$histfile"
+# pipe history through dmenu and parse results
+#while :; do
+	# Test for operators, set var accordingly
+	if printf '%s\n' "+-*/^%&|" | grep -q "$1"; then
+		set -- "calc" "$(tail -n 1 "$HIST")" "$@"
+	fi 
+	result="$(cheese_it "$@")"
+	test -z result && break
+	# if result is a number, write it to clip
+	if test "$result" -eq "$result" >/dev/null; then
+		printf '%s\n' "$result" | xclip -in
+		break
+	fi	
+	printf '%s\n' "$result" >> "$HIST"
+	set -- $(tac < "$HIST" | dmenu)
+#done
