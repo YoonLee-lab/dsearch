@@ -1,13 +1,3 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
-selection() {
-  find ~/ -type f | dmenu -p Upload
-}
-
-if [[ $1 ]]; then
-  result="$1"
-else
-  result=$(selection)
-fi
-
-pbpst -Sf $result | xcmenu -ic #|| curl -sT- https://p.iotek.org < $result | xcmenu -ic
+find ~/ -type f | grep "$1" | dmenu -p Upload | xe -s 'curl -F c=@$1 "https://ptpb.pw/?u=1"' | xclip -i -selection "clipboard"

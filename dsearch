@@ -11,7 +11,7 @@ create_menu() {
 	# Bang completions
 	cd -- "$handledir" || exit 1
 	find . -type f -printf "!%f\n" | sort -u
-	printf '!%s\n' 'snap' 'stop' 'close' 'win'
+	printf '!%s\n' 'conv' 'dpi' 'base' 'calc' 'snap' 'stop' 'close' 'win'
 
 }
 
@@ -60,6 +60,10 @@ handle_results() { # args -> launch
 			!code\ *)         exec "$handledir"/code   "${input#*code }"   ;;
 			!dict\ *)         exec "$handledir"/dict   "${input#*dict }"   ;;
 			!math\ *)         exec "$handledir"/math   "${input#*math }"   ;;
+			!conv\ *)         exec "$handledir"/math "conv ${input#*conv }" ;;
+			!base\ *)         exec "$handledir"/math "base ${input#*base }" ;;
+			!calc\ *)         exec "$handledir"/math "calc ${input#*calc }" ;;
+			!dpi\ *)          exec "$handledir"/math "dpi ${input#*dpi }" ;;
 			!man\ *)          exec "$handledir"/man    "${input#*man }"    ;;
 			!pkg\ *)	  exec "$handledir"/pkg    "${input#*pkg }"    ;;
 			!gh\ *)   	  exec "$handledir"/gh     "${input#*gh }"     ;;
