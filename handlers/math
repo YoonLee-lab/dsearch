@@ -1,33 +1,36 @@
 #!/bin/sh
 ## Requires units, bc, dmenu
 
+# zero our history file - per session only
 HIST="$XDG_DATA_HOME/mathhist"
+rm "$HIST" && touch "$HIST"
 
 # math base calc convert icalc rpn units
 cheese_it() {
 	case "$1" in
 		base) printf 'ibase=%s;obase=%s;%s\n' "$2" "$3" "$4" | bc ;;
 		calc) printf '%s%s%s\n'	"$2" "$3" "$4" | bc ;;
-		convert) units "$2 $3" $5 | awk 'NR==1{print $2}';;
+		conv*) units "$2 $3" $5 | awk 'NR==1{print $2}';;
 		icalc) printf '%s%s%s/1\n' "$2" "$3" "$4" | bc ;;
 		dpi) printf 'sqrt(%s^2+%s^2)/%s\n' "$2" "$3" "$4" | bc ;;
 		*) printf '%s\n' "$1"
 	esac
 }
 
+# Unstring incoming variables
+set -- $@
+
 # pipe history through dmenu and parse results
-#while :; do
+while :; do
 	# Test for operators, set var accordingly
-	if printf '%s\n' "+-*/^%&|" | grep -q "$1"; then
-		set -- "calc" "$(tail -n 1 "$HIST")" "$@"
-	fi 
-	result="$(cheese_it "$@")"
+	printf '%s\n' "+-*/^%&|" | grep -q "$1" && set -- "calc" "`tail -n 1 "$HIST"`" "$@"
+	result="`cheese_it "$@"`"
 	test -z result && break
-	# if result is a number, write it to clip
-	if test "$result" -eq "$result" >/dev/null; then
+	# If result is in our histfile, pop into clipboard and exit
+	if grep -q "$result" "$HIST"; then
 		printf '%s\n' "$result" | xclip -in
 		break
 	fi	
 	printf '%s\n' "$result" >> "$HIST"
-	set -- $(tac < "$HIST" | dmenu)
-#done
+	set -- `tac < "$HIST" | dmenu`
+done
