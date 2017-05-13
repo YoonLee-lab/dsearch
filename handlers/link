@@ -65,4 +65,4 @@ if [[ $lnk == ytdl* ]]; then
 	lnk=${lnk/ytdl:\/\//https:\/\/www.youtube.com/watch?v=}
 fi
 
-[[ $lnk ]] && xcmenu -ic "$lnk"
+[[ $lnk ]] && echo "$lnk" | xclip -selection "clipboard"
