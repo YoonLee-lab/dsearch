@@ -4,19 +4,19 @@
 PB="https://ptpb.pw/?u=1"
 
 picture() {
-	maim -d 1 --format=png /dev/stdout | curl -F c=@- "$PB" | sed 's/$/.png/' | xcmenu -ic
+	maim -d 1 --format=png /dev/stdout | curl -F c=@- "$PB" | sed 's/$/.png/' | xclip -i -selection "clipboard"
 }
 
 win() {
 	WID=$(lsw | tail -n 1)
-	maim --window="$WID" -d 1 --format=png /dev/stdout | curl -F c=@- "$PB" | sed 's/$/.png/' | xcmenu -ic
+	maim --window="$WID" -d 1 --format=png /dev/stdout | curl -F c=@- "$PB" | sed 's/$/.png/' | xclip -i -selection "clipboard"
 }
 
 video() {
 	tmp="`mktemp`"
- 	ffmpeg -y -video_size "$(wattr w "$(lsw -r)")x$(wattr h "$(lsw -r)")" -framerate 60 -f x11grab -i "$DISPLAY" -f matroska "$tmp"
+ 	ffmpeg -y -video_size "$(wattr w "$(lsw -r)")x$(wattr h "$(lsw -r)")" -framerate 60 -f x11grab -i "$DISPLAY" -f h264 "$tmp"
 	wait
- 	curl -F c=@"$tmp" "$PB" | sed 's/$/.mkv/' | xcmenu -ic 
+ 	curl -F c=@"$tmp" "$PB" | xclip -i -selection "clipboard"
 }
 
 ## Main
