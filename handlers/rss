@@ -70,12 +70,13 @@ select_feed() {
 		[[ ! $feed ]] && break
 		case "$feed" in
 			view\ all) 	all=true				;;
-			quit)		break 					;;
+			quit)		update_count
+						break 					;;
 			*)			all=false
 						select_post "$feed" 	;;
 		esac
-		update_count
 	done
+	update_count
 }
 
 select_feed
