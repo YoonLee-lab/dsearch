@@ -14,7 +14,7 @@ win() {
 
 video() {
 	tmp="`mktemp`"
- 	ffmpeg -y -video_size "$(wattr w "$(lsw -r)")x$(wattr h "$(lsw -r)")" -framerate 60 -f x11grab -i "$DISPLAY" -f h264 "$tmp"
+ 	ffmpeg -y -video_size "$(wattr w "$(lsw -r)")x$(wattr h "$(lsw -r)")" -framerate 30 -f x11grab -i "$DISPLAY" -f matroska "$tmp"
 	wait
  	curl -F c=@"$tmp" "$PB" | xclip -i -selection "clipboard"
 }
