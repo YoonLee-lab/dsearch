@@ -2,7 +2,8 @@
 
 # Database of bookmarks for quick linking
 readonly datadir="$XDG_DATA_HOME"
-readonly pics="$HOME"/media/pictures
+readonly pics="$HOME"/media/photos
+readonly downloads="$XDG_CONFIG_HOME"/chromium/Downloads
 
 list() {
 	lsw | while read -r w; do
@@ -16,6 +17,7 @@ list() {
 	find "$datadir"/bookmark -type f -not -path '*/\.*'
 	find "$datadir"/mpv -type f -not -path '*/\.*'
 	find "$pics" -type f -not -path '*/\.*'
+	find "$downloads" -type f -not -path '*/\.*'
 }
 
 build() {
@@ -34,9 +36,11 @@ build() {
 				input="${input/.pls/}"
 				printf '%s\n' "playlist - ${input##*mpv\/}"
 				;;
-			*pictures*) 
+			*media/photos*) 
 				printf 'IMG:%q\t%s\n' "$pic/$input" "image - ${input##*pictures\/}"
 				;;
+			*chromium/Downloads*)
+				printf 'IMG:%q\t%s\n' "$pic/$input" "downloads - ${input##*pictures\/}"
 					esac
 	done
 }
@@ -51,12 +55,13 @@ playlist() {
 	sed -n -e "/$lnk/ { n; s/^File[0-9]\+=//p }" < "$datadir/mpv/${1#*-\ }.pls"
 }
 
-lnk=$(list | sort -u | build | dmenu -p "Select bookmark: ")
+lnk=$(list | sort -u | build | dmenu -is 360x240 -p "Select bookmark: ")
 
 case $lnk in
 	current*) lnk="${lnk#*-\ }" ;;
 	playlist*) lnk="$(playlist "$lnk")" ;;
 	image*) lnk="$(exiftool "$pics/${lnk#*-\ }" | awk '/^Comment/ { print $NF }')" ;;
+	downloads*)lnk="${lnk#*-\ }" ;;
 	now\ playing*) lnk="${lnk#*-\ }" ;;
 	*) read -r lnk < "$datadir/bookmark/$lnk" ;;
 esac
