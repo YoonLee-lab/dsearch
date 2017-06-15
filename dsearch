@@ -11,7 +11,7 @@ create_menu() {
 	# Bang completions
 	cd -- "$handledir" || exit 1
 	find . -type f -printf "!%f\n" | sort -u
-	printf '!%s\n' 'conv' 'dpi' 'base' 'calc' 'snap' 'stop' 'close' 'win'
+	printf '!%s\n' 'conv' 'dpi' 'base' 'calc' 'snap' 'stop' 'close' 'win' 'rw'
 
 }
 
@@ -47,6 +47,7 @@ handle_results() { # args -> launch
 			!man)    exec "$handledir"/man    ;;
 			!pb)     exec "$handledir"/pb     ;;
 			!np)     exec "$handledir"/np     ;;
+			!rw)     exec browse "$(curl -sI "https://en.wikipedia.org/wiki/Special:Random" | awk '/location/{print $2}')" ;;
 
 
 			!pl\ save)        exec "$handledir"/youtube/savesearch ;;
