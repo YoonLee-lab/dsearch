@@ -8,7 +8,7 @@ picture() {
 }
 
 win() {
-	WID=$(lsw | tail -n 1)
+	WID="$(printf '%d\n' "$(lsw | tail -n 1)")"
 	maim --window="$WID" -d 1 --format=png /dev/stdout | curl -F c=@- "$PB" | sed 's/$/.png/' | xclip -i -selection "clipboard"
 }
 
