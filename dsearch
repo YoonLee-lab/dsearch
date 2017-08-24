@@ -42,6 +42,7 @@ handle_results() { # args -> launch
 			!link)   exec "$handledir"/link   ;;
 			!song)   exec "$handledir"/song   ;;
 			!math)   exec "$handledir"/math   ;;
+			!more)   exec "$handledir"/more   ;;
 			!pass)   exec "$handledir"/pass   ;;
 			!rss)    exec "$handledir"/rss    ;;
 			!man)    exec "$handledir"/man    ;;

@@ -1,0 +1,43 @@
+#!/bin/sh
+# Youtube search handler
+
+DIR="$(mktemp -d /tmp/yt.XXXX)"
+
+token() {
+	echo '{ "command": ["get_property", "path"] }' | socat - /tmp/mpvsocket | jshon -e data -u | sed 's/^.*v=//' | sed 's|ytdl://||'
+}
+
+filter() {
+	jshon -CQ -e items -a -e snippet -e title -uppe id -e videoId -uppe snippet -e thumbnails -e high -e url -u
+}
+
+# Grab images, create folder + files
+fetch() {
+	i=0
+	while {
+		read -r title
+		read -r blob
+		read -r url
+	} do
+		mkdir -p "$DIR/$(dirname "$title")"
+		curl -s --create-dirs "$url" -o "$DIR/$i" &
+		printf '%s\n' "$blob" > "$DIR/$title-url"
+		printf 'IMG:%s\t%s\n' "$DIR/$i" "$title"
+		i=$((i+1))
+	done
+}
+
+handle() {
+	while read -r input; do
+		read -r url < "$DIR/$input-url" || exit 0
+		plumber "ytdl://$url"
+	done
+	rm -rf "$DIR"
+}
+
+read -r key < "$XDG_DATA_HOME/youtube/key"
+videoId="$(token)"
+test -z "$videoId" && exit 0
+URL="https://www.googleapis.com/youtube/v3/search?part=snippet&relatedToVideoId=$videoId&type=video&key=$key&maxResults=20"
+
+curl -s "$URL" | filter | fetch | dmenu -p "Select video: " -is 360x240 | handle

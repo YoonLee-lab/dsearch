@@ -10,11 +10,10 @@ cheese_it() {
 	case "$1" in
 		base) printf 'ibase=%s;obase=%s;%s\n' "$2" "$3" "$4" | bc ;;
 		# TODO: Implement temp conversions as well
-		calc) printf '%s%s%s\n'	"$2" "$3" "$4" | bc ;;
 		conv*) units "$2 $3" $5 | awk 'NR==1{print $2}';;
 		icalc) printf '%s%s%s/1\n' "$2" "$3" "$4" | bc ;;
 		dpi) printf 'sqrt(%s^2+%s^2)/%s\n' "$2" "$3" "$4" | bc ;;
-		*) printf '%s\n' "$1"
+		*) printf '%s%s%s\n'	"$2" "$3" "$4" | bc ;;
 	esac
 }
 
