@@ -62,7 +62,7 @@ handle() {
 
 ## Main pipeline
 if [[ "$1" == *youtube.com/channel/* ]]; then
-	querychan "$1"
+	querychan "$1" 
 else
-	query "$@" 
+	query "$@"
 fi | parse | buildmenu | dmenu -p "Select video: " -is 360x240 | handle "$type"

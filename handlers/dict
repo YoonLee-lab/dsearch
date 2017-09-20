@@ -1,4 +1,6 @@
 #!/bin/sh
+# Requires curl, awk
+# Uses `browse` from https://github.com/halfwit/plumber
 
 result="`curl -s "dict://dict.org/d:$1:gcide" | awk '/151/{flag=1;next}/250/{flag=0}flag'`" 
 

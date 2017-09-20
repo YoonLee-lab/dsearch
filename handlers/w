@@ -45,5 +45,5 @@ fi
 # Pipe to less instead here
 
 result="${result##*wikipedia.org/wiki/}"
-st -e varless "$(printf '%s\n\n%s\n' "$(get_snippet "$result")" "$(get_links "$result")")"
+st -c dict -e varless "$(printf '%s\n\n%s\n' "$(get_snippet "$result")" "$(get_links "$result")")"
 rm -rf "$tmp"
