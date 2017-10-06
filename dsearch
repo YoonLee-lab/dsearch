@@ -54,7 +54,6 @@ handle_results() { # args -> launch
 			!pl\ save)        exec "$handledir"/youtube/savesearch ;;
 			!reddit\ *)       exec "$handledir"/reddit "${input#*reddit }" ;;
 			!lyrics\ *)       exec "$handledir"/lyrics "${input#*lyrics }" ;;
-			!godoc\ *)	      exec "$handledir"/godoc  "${input#*godoc }"  ;;
 			!album\ *)        exec "$handledir"/album  "${input#*album }"  ;;
 			!quote\ *)        exec "$handledir"/quote  "${input#*quote }"  ;;
 			!save\ *)         exec "$handledir"/save   "${input#*save }"   ;;
