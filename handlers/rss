@@ -13,7 +13,14 @@ list_all() {
 # List all files, which can be represented by an directory structure
 list_sub() {
 	cd "$RSS/$@"
-	find . -type f ! -name url ! -name count | sed 's|./||'
+	ls -t -I url | while read -r item; do
+		if test -d "$item"; then
+			find "$item" -type f
+		else
+			printf '%s\n' "$item"
+		fi
+	done
+#	find . -type f ! -name url ! -name count | sed 's|./||'
 	printf '%s\n%s\n' "clear all" "exit"
 }
 
