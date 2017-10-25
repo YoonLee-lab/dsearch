@@ -27,7 +27,7 @@ list_sub() {
 list_main() {
 	cd "$RSS"
 	# Catch case when we have no feeds
-	if ls -d "$RSS"/*/"[new]"*; then
+	if ls -d "$RSS"/*/"[new]"* >/dev/null; then
 		dirname */\[new\]* | sort -u
 	fi
 	printf '%s\n%s\n' "view all" "exit"
@@ -35,7 +35,7 @@ list_main() {
 
 # You can comment this out, it's just for my status bar
 update_count() {
-	if ls -d "$RSS"/*/"[new]"*; then
+	if ls -d "$RSS"/*/"[new]" >/dev/null; then
 		dirname "$RSS"/*/\[new\]* | wc -l > "$XDG_RUNTIME_DIR/statusbar/rss"
 	else
 		printf '%s\n' "" > "$XDG_RUNTIME_DIR/statusbar/rss"
@@ -56,8 +56,7 @@ plumb() {
 	else
 		plumber < "$RSS/$@" &
 		scrub "$RSS/$@"
-		update_count
-		dirname "$@"
+		printf '%s\n' "exit"
 	fi
 }
 
