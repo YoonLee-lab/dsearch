@@ -20,7 +20,6 @@ list_sub() {
 			printf '%s\n' "$item"
 		fi
 	done
-#	find . -type f ! -name url ! -name count | sed 's|./||'
 	printf '%s\n%s\n' "clear all" "exit"
 }
 
