@@ -3,7 +3,7 @@
 
 datadir=/usr/local/share
 handledir=$datadir/dsearch
-search='https://duckduckgo.com?q='
+search='https://duckduckgo.com/lite/?kl=us-en&k1=-1&kaf=1&kd=-1&kh=1&kf=fw&kv=1&q='
 config=${XDG_CONFIG_HOME:-~/.config}/dsearch
 
 create_menu() {

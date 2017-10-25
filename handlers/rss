@@ -1,82 +1,83 @@
-#!/bin/bash
+#!/bin/sh
 
 ## Dmenu based frontend to read RSS directory
 RSS=$XDG_CACHE_HOME/rss
-declare all=false
 
-select_site() {
-    cd "$1"
-    for i in *; do
-        [[ "$i" != "url" ]] && printf '%s\n' "$i"
-    done
+# List all feeds
+list_all() {
+	cd "$RSS"
+	ls -I count -I .stfolder
+	printf '%s\n' "exit"
+}	
+
+# List all files, which can be represented by an directory structure
+list_sub() {
+	cd "$RSS/$@"
+	find . -type f ! -name url ! -name count | sed 's|./||'
+	printf '%s\n%s\n' "clear all" "exit"
 }
 
+# List all files with [new] in title
+list_main() {
+	cd "$RSS"
+	dirname */\[new\]* | sort -u 
+	printf '%s\n%s\n' "view all" "exit"
+}
+
+# You can comment this out, it's just for my status bar
 update_count() {
-	ls "$RSS" | while read -r title; do
-		if ls "$RSS/$title"/\[new\]* &>/dev/null; then
-			printf '%s\n' "$title"
-		fi 
-	done | wc -l | bc > "$RSS"/count
+	dirname "$RSS"/*/\[new\]* | wc -l > "$XDG_RUNTIME_DIR/statusbar/rss"
 }
 
-filter_read() {
-	while read -r title; do
-		if [[ $all == true ]]; then
-			printf '%s\n' "$title"
-		elif ls "$RSS/$title"/\[new\]* &>/dev/null; then
-            printf '%s\n' "$title"
-        fi
-    done
-	printf '%s\n%s\n' "view all" "quit"
+# Remove [new] and update counts
+scrub() {
+	new="$(printf '%s\n' "$@" | sed 's/\[new\] //')"
+	case "$@" in
+		*\[new\]*) mv "$@" "$new" ;;
+	esac
 }
 
-mark_read() {
-	cd "$RSS/$1"
-	for i in *; do
-		mv "$i" "${i/\[new\]\ /}" &
-	done
-}
-
-append() {
-	while read -r entry; do
-		printf '%s\n' "$entry"
-	done
-	printf '%s\n' "$1"
-}
-
-select_post() {
-	local feed
-	echo "$RSS/$1"
-	while :; do
-		feed="$(ls -t -I url -I count "$RSS/$1" | append "clear posts" | dmenu -p "Select post: ")"
-		[[ ! $feed ]] && break
-		case "$feed" in
-			clear\ posts) 	mark_read "$1"
-							break ;;
-			quit)        	break ;;
-		esac
-    	read -r url < "$RSS/$1/$feed"
-    	mv "$RSS/$1/$feed" "$RSS/$1/${feed/\[new\]\ /}"
-    	plumber "$url" & 
+plumb() {
+	if test -d "$RSS/$@"; then
+		printf '%s\n' "$@"
+	else
+		plumber < "$RSS/$@" &
+		scrub "$RSS/$@"
 		update_count
-	done
+		dirname "$@"
+	fi
 }
 
-# each count check 
-select_feed() {
-	local feed
-	while :; do
-		feed="$(ls "$RSS" | filter_read | dmenu -p "Select sub: ")"
-		[[ ! $feed ]] && break
-		case "$feed" in
-			view\ all) 	all=true				;;
-			quit)		update_count
-						break 					;;
-			*)			all=false
-						select_post "$feed" 	;;
+# Read all selections and plumb any good result
+handle() {
+	while read -r in; do
+		case "$in" in
+			# Exit has to be from non-function
+			exit)   	update_count; printf '%s\n' "exit" ;;
+			clear\ all) for i in "$RSS/$@"/*; do
+							scrub "$i"
+						done 
+						update_count
+						printf '%s\n' "$@" ;;
+			view\ all)	printf '%s\n' "all" ;;
+			*)			test -f "$RSS/$@/$in" && plumb "$@/$in" || plumb "$in" ;;
 		esac
 	done
-	update_count
 }
 
-select_feed
+# Run list based on result of previous actions
+switch() {
+	case "$@" in
+		main)	list_main     | dmenu -p "Select feed: " | handle "$@" ;;
+		all)	list_all      | dmenu -p "Select feed: " | handle "$@" ;;
+		*)		list_sub "$@" | dmenu -p "Select post: " | handle "$@" ;;
+	esac
+}
+
+## Main loop
+while :; do
+	# Assume main if nothing set
+	test -z "$1" && set -- main
+	set -- "$(switch "$@")"
+	test "$1" = exit && exit 0
+done
