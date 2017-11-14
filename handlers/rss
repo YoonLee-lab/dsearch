@@ -54,8 +54,8 @@ plumb() {
 	if test -d "$RSS/$@"; then
 		printf '%s\n' "$@"
 	else
-		scrub "$RSS/$@"
 		plumber < "$RSS/$@" >/dev/null &
+		scrub "$RSS/$@"
 		printf '%s\n' "exit"
 	fi
 }
