@@ -44,7 +44,6 @@ handle_results() { # args -> launch
 			!math)   exec "$handledir"/math   ;;
 			!more)   exec "$handledir"/more   ;;
 			!pass)   exec "$handledir"/pass   ;;
-			!rss)    exec "$handledir"/rss    ;;
 			!man)    exec "$handledir"/man    ;;
 			!pb)     exec "$handledir"/pb     ;;
 			!np)     exec "$handledir"/np     ;;

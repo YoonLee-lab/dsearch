@@ -34,8 +34,7 @@ note() {
 save_feed() {
   local result
   read -r result
-  mkdir "$XDG_CACHE_HOME/rss/$result"
-  echo "$1" > "$XDG_CACHE_HOME/rss/$result/url"
+  echo "url = $1" >> "$XDG_DATA_HOME"/feedurls
 }
 
 lsw | while read -r w; do
