@@ -1,30 +1,29 @@
 #!/usr/bin/env bash
+# Bash lets me do lazy substitutions
+tmp="$(mktemp -d)"
 
-## Requires
-# https://github.com/jarun/googler
-# dmenu
-
-tmp=$(mktemp)
-
-fetch() {
-		googler "$1" --json -x -n 25 | jshon -a -e title -upe abstract -upe url -u
+fetch_data() {
+    data=$(curl -sBX GET -L "$1" -A "Mozilla/5.0 (Linux; Android 6.0.1; Nexus  MOB3OD)" -o "$tmp"/data)
 }
 
 chunk() {
-		while {
-				read -r title
-				read -r _
-				read -r url
-		} do
-				printf '%s\n' "${title//\//} :: $url"
-		done
+	while {
+		read -r title
+		read -r link
+	} do 
+		printf '%s - %s\n' "$title" "$link"
+	done
 }
 
-handle() {
-		while read -r input; do
-				plumber "${input##*\ ::\ }" &
-		done 
-		rm -rf "$tmp"
+parse() {
+    jshon -QF "$tmp"/data -e items -a -e title -upe link -u
 }
 
-fetch "$1" | chunk | dmenu -p "Select result: " | handle
+read -r KEY < "$XDG_DATA_HOME"/youtube/key
+read -r ID < "$XDG_DATA_HOME"/youtube/gid
+
+url="https://www.googleapis.com/customsearch/v1?key=$KEY&cx=$ID&q=${1// /+}&alt=json"
+
+fetch_data "$url"
+parse | chunk | dmenu -p "Results: " | awk '{ print $NF }' | plumber
+rm -rf "$tmp"
