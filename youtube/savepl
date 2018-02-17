@@ -38,10 +38,13 @@ fetch_title(){
 # Main
 
 if [[ $1 == https://www.youtube.com/channel/* ]]; then
-	# make our directory
-	path="$(echo -n | dmenu -p "Enter title: ")"
-	mkdir -p "$XDG_CACHE_HOME/rss/$path"
-	echo "https://www.youtube.com/feeds/videos.xml?channel_id=${1#*channel\/}" > "$XDG_CACHE_HOME/rss/$path"/url
+	echo "https://www.youtube.com/feeds/videos.xml?channel_id=${1#*channel\/}" >> "$XDG_DATA_HOME"/feedurls
+	exit 0
+fi
+
+if [[ $1 == https://www.youtube.com/user/* ]]; then
+	user="$(echo "$1" | sed 's/^.*user\///;s/\/.*//')"
+	echo "https://www.youtube.com/feeds/videos.xml?user=$user" >> "$XDG_DATA_HOME"/feedurls
 	exit 0
 fi
 

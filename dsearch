@@ -1,6 +1,6 @@
 #!/bin/sh
 # Dmenu search with history
-
+# TODO: Break out anything specific to my own setup
 datadir=/usr/local/share
 handledir=$datadir/dsearch
 search='https://duckduckgo.com/lite/?kl=us-en&k1=-1&kaf=1&kd=-1&kh=1&kf=fw&kv=1&q='

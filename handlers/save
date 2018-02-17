@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+#TODO: Break out into own binary, to be called in entriesrc/handlersrc instead
 # Tool to save arbitrary things from the current clip to various locations
 name() {
   printf '\n' | dmenu -p "Save $1 as: " -l 1
