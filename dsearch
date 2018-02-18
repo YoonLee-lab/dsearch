@@ -67,9 +67,9 @@ handle_results() { # args -> launch
 			!man\ *)          exec "$handledir"/man    "${input#*man }"    ;;
 			!pkg\ *)	  exec "$handledir"/pkg    "${input#*pkg }"    ;;
 			!gh\ *)   	  exec "$handledir"/gh     "${input#*gh }"     ;;
-			!pl\ *)           exec "$handledir"/yt     "$input"            ;;
+#			!pl\ *)           exec "$handledir"/yt     "$input"            ;;
 			!ch\ *)		  exec "$handledir"/yt     "$input"           ;;
-			!yt\ *)           exec "$handledir"/yt     "${input#*yt }"     ;;
+#			!yt\ *)           exec "$handledir"/yt     "${input#*yt }"     ;;
  			!pb\ *)           exec "$handledir"/pb     "${input#*pb }"     ;;
 			!rq\ *)           exec "$handledir"/rq     "${input#*rq }"     ;;
 			!is\ *)     plumber `"$handledir"/is     "${input#*is }"`   ;;
