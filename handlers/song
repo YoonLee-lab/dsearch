@@ -6,8 +6,13 @@
 
 load() {
 	local i=0
-		mpc playlist | while read -r title; do
-		printf '%s %s\n' "$((++i))" "$title"
+	current="$(mpc current)"
+	mpc playlist | while read -r title; do
+		if [[ $current == $title ]]; then
+			printf '%s Now Playing: %s\n' "$((++i))" "$title"
+		else
+			printf '%s %s\n' "$((++i))" "$title"
+		fi
 	done | dmenu -p "Select song: "
 }
 ## Main
