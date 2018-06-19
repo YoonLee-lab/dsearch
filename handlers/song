@@ -32,7 +32,8 @@ if ! mpc playlist | grep "${result#*\ }"; then
 else
 	mpc play "${result%%\ *}"
 	sleep 2
-	if ! pgrep mpg123; then
+	# Should hopefully only hit mpg123 and ogg123. This is considered bad programming though, as it can break in weird ways. This whole script is just bad - but it'll get fixed when there's more time
+	if ! pgrep 123; then
 		stream
 	fi
 fi
