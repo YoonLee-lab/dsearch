@@ -32,9 +32,9 @@ note() {
 }
 
 save_feed() {
-  local result
-  read -r result
-  echo "url = $1" >> "$XDG_DATA_HOME"/feedurls
+  if ! grep "$1" "$XDG_DATA_HOME"/feedurls"; then
+    printf '%s\n' "$1" >> "$XDG_DATA_HOME"/feedurls
+  fi
 }
 
 lsw | while read -r w; do
@@ -68,8 +68,8 @@ fi
   *epub*)       name "document" | doc "epub"  	"$input" ;;
   *pdf*)        name "document" | doc "pdf"     "$input" ;;
   *video*) exec "$XDG_DATA_HOME/youtube/savepl" "$input" ;;
-  *application/atom*) name "feed" | save_feed 	"$input" ;;
-  *application/rss*)  name "feed" | save_feed 	"$input" ;;
+  *application/atom*) save_feed 	"$input" ;;
+  *application/rss*)  save_feed 	"$input" ;;
   *)
     items=( "git - " "error - " "keyboards - " "linux - "
             "main - " "programming - " "electronics - " )
