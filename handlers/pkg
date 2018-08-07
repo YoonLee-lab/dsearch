@@ -1,6 +1,6 @@
 #!/bin/bash
 
-result="$(xbps-query -Rs "$1" | dmenu -p "Select package: ")"
+result="$(sudo xbps-query -Rs "$1" | dmenu -p "Select package: ")"
 result="$(awk '{print $2}' <<< "$result")"
 
 [[ $result ]] || exit 0

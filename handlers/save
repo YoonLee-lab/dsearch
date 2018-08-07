@@ -32,8 +32,9 @@ note() {
 }
 
 save_feed() {
-  if ! grep "$1" "$XDG_DATA_HOME"/feedurls"; then
+  if ! grep "$1" "$XDG_DATA_HOME"/feedurls; then
     printf '%s\n' "$1" >> "$XDG_DATA_HOME"/feedurls
+	updatefeeds
   fi
 }
 
