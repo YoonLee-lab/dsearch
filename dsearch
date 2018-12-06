@@ -13,8 +13,7 @@ search='https://duckduckgo.com/q='
 create_menu() {
 	test -f "$config"/entriesrc && . "$config"/entriesrc
 	# Bang completions
-	cd -- "$handledir" || exit 1
-	find . -type f -printf "!%f\n" | sort -u
+	find "$handledir" -type f | xe basename | sort -u | sed 's/^/!/'
 	printf '!%s\n' 'conv' 'dpi' 'base' 'calc' 'snap' 'stop' 'close' 'win' 'rw'
 
 }
