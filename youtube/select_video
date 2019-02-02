@@ -2,7 +2,7 @@
 # Create menu based on URLs and titles.
 
 load() {
-    sed -n -e 's/^.*Title[0-9]\+=//p' "$XDG_DATA_HOME/mpv/$1"
+	grep 'Title.*=' "$XDG_DATA_HOME/mpv/$1" | sed 's/Title[0-9]\{1,\}=//'
 }
 
 scrub() {
@@ -13,10 +13,8 @@ scrub() {
 
 handle() {
 	while read -r pos; do
-		play "$XDG_DATA_HOME/mpv/$1"
-		sleep 1
-		mpvc -j "$pos"
+		grep File"$pos"= "$XDG_DATA_HOME/mpv/$1" | sed 's/File[0-9]\{1,\}=//' 
 	done
 }
 # Main
-load "$1" | dmenu -p "Select video:" | scrub "$1" | handle "$1"
+load "$1" | dmenu -p "Select video:" | scrub "$1" | handle "$1" | plumber
