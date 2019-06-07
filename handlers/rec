@@ -1,15 +1,15 @@
 #!/bin/sh
 # Screen record or screen shot
 
-PB="https://ptpb.pw/?u=1"
+PB="https://img.vim-cn.com"
 
 picture() {
-	maim -d 1 --format=png /dev/stdout | curl -F c=@- "$PB" | sed 's/$/.png/' | xclip -i -selection "clipboard"
+	maim -d 1 --format=png /dev/stdout | curl -F c=@- "$PB" | xclip -i -selection "clipboard"
 }
 
 win() {
 	WID="$(printf '%d\n' "$(lsw | tail -n 1)")"
-	maim --window="$WID" -d 1 --format=png /dev/stdout | curl -F c=@- "$PB" | sed 's/$/.png/' | xclip -i -selection "clipboard"
+	maim --window="$WID" -d 1 --format=png /dev/stdout | curl -F 'image=@-' "$PB" | sed 's/$/.png/' | xclip -i -selection "clipboard"
 }
 
 video() {

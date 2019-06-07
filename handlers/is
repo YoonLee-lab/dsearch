@@ -34,8 +34,7 @@ handle_results() {
 read -r KEY < "$XDG_DATA_HOME"/youtube/key
 read -r ID < "$XDG_DATA_HOME"/youtube/imid
 
-url="https://www.googleapis.com/customsearch/v1?key=$KEY&cx=$ID&q=${1// /+}&searchType=image&fileType=png&alt=json"
+url="https://www.googleapis.com/customsearch/v1?key=$KEY&cx=$ID&q=${1// /+}&searchType=image&fileType=png&alt=json&fields=items/title,items/link,items/snippet,items/image/thumbnailLink"
 
 fetch_data "$url"
-
 parse | itemize | dmenu -p "Select image: " -is 150x150 | handle_results
